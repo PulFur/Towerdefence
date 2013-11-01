@@ -4,8 +4,8 @@ var mineimg = new Image();
 var turimg = new Image();
 	turimg.src = "gfx/turret.png";
 	
-var l = new Image();
-	l.src = "ui/infoUI.jpg";
+var logo = new Image();
+	logo.src = "ui/infoUI.jpg";
 	
 var bulimg = new Image();
 	bulimg.src = "gfx/br.bmp";
@@ -105,12 +105,6 @@ var level=0;
 var kills = 0;
 var money = 10;
 
-var wave = 0;
-var waveProg = 0;
-var waitForFinish = false;
-var waitForNextLevel = false;
-var waitForNextLevelTimer;
-var currentWave;
 var currentMap;
 
 var showMenu = true;
@@ -125,11 +119,6 @@ var mouseObject;
 var spectate = 0;
 
 var bottomUIheight = 68;
-
-
-
-
-
 
 
 

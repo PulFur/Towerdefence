@@ -52,24 +52,24 @@ turretTypes[turretTypes.length] =
 	value : 5,
 	shoot : function(o) {
 		if (o == null) {
-		for (var i=this.range; i > 15; i-=10) {
-			var den = this.density + this.tick / 1000;
-			ctx.beginPath();
-			ctx.fillStyle = "rgba(0,0,0,"+den+")";
-			ctx.arc(this.x, this.y, i, 0, 2 * Math.PI, true);
-			ctx.lineWidth = this.density;
-			ctx.fill(); 
-		}		
-		
-		this.tick+=1;
-		if (this.tick >= this.range) {
-				for (var a = 0 ; a < enemies.length; a++) {
-					if (enemies[a].health > 0 && lineDistance(this.x,this.y,enemies[a].x,enemies[a].y) < this.range) { 
-						enemies[a].takeDamageFrom(this);
+			for (var i=this.range; i > 15; i-=10) {
+				var den = this.density + this.tick / 1000;
+				ctx.beginPath();
+				ctx.fillStyle = "rgba(0,0,0,"+den+")";
+				ctx.arc(this.x, this.y, i, 0, 2 * Math.PI, true);
+				ctx.lineWidth = this.density;
+				ctx.fill(); 
+			}		
+			
+			this.tick+=1;
+			if (this.tick >= this.range) {
+					for (var a = 0 ; a < enemies.length; a++) {
+						if (enemies[a].health > 0 && lineDistance(this.x,this.y,enemies[a].x,enemies[a].y) < this.range) { 
+							enemies[a].takeDamageFrom(this);
+						}
 					}
-				}
-			this.tick = -50;
-		}
+				this.tick = -50;
+			}
 		}
 	},
 	ableToShoot: function(o) {

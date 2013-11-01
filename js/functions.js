@@ -49,7 +49,7 @@ function getAngle(o1,o2) {
 }
 
 function since(time) {
-	return Date.now() -time;
+	return Date.now() - time;
 }
 
 function lineDistance( x1,y1,x2,y2 ) { 
@@ -65,15 +65,14 @@ return (x > 0 && x < cwidth &&
 }
 
 function objectsOverlap(o1,o2) {
-
 return	o1.x > o2.x - o2.width && o1.x < o2.x +o2.width &&
 		o1.y > o2.y - o2.height && o1.y < o2.y +o2.height;
 }
 		
 function mInsideObj(o) {
 if (o.img != null) {
-o.width = o.img.width;
-o.height = o.img.height;
+	o.width = o.img.width;
+	o.height = o.img.height;
 }
 return 	(mousex > o.x-o.width/2 && mousex < o.x+o.width/2) &&
 		(mousey > o.y-o.height/2+c2height && mousey < o.y+o.height/2+c2height);
@@ -89,7 +88,8 @@ function addImage(path) {
 
 function clearObjects() {
 	mines.length = null;
-	notices.length = null; 
+	notices.length = null;
+	thunders.length = null;
 	enemies.length = null;
 	turrets.length = null;
 	bullets.length = null;

@@ -46,13 +46,11 @@ function bullet(ttype,x,y,angle,type,hostid,enemy) {
 	}
 	
 	this.draw = function () {
-		//drawRotatedImage(this.img,this.x-this.img.width/2,this.y-this.img.height/2,this.atan-1.6);
 		drawRotatedImage(this.img,this.x,this.y,this.atan-1.6);
 	}
 
 }
 function enemy(type) {
-	this.lastHitBy = null;
 	this.isEnemy = true;
 	this.type = type;
 	this.name = enemyTypes[type].name;
@@ -62,6 +60,7 @@ function enemy(type) {
 	this.x = maps[level].path[this.path][0].x;
 	this.y = maps[level].path[this.path][0].y;
 	this.speed = enemyTypes[type].speed;
+	this.mSpeed = this.speed;
 	this.health = enemyTypes[type].health;
 	this.nextpoint = 0;
 	this.img = enemyTypes[type].img;
@@ -69,10 +68,12 @@ function enemy(type) {
 	this.width = this.img.width;
 	this.height = this.img.height;
 	
+	this.elementalStatus = new Array();
 	this.moved = 0;
 	
 	this.update = function () {
 		if (this.health > 0 ) {			
+			this.updateBurdens();
 			this.move();
 			this.draw();
 			this.drawHealthbar();
@@ -84,7 +85,43 @@ function enemy(type) {
 		}
 	}
 
-	
+	this.updateBurdens = function () {
+		this.mSpeed = this.speed;
+		for (var i=0; i < this.elementalStatus.length; i++) {
+			if (this.elementalStatus[i].active) {
+			
+				if (Date.now() - this.elementalStatus[i].time > 0) {
+					this.elementalStatus[i].active = false;
+				}
+
+				
+				switch (this.elementalStatus[i].o.type) {
+					case 0:
+						break;
+					case 1: // fire
+						ctx.beginPath();
+						ctx.fillStyle = "red";
+						ctx.arc(this.x+Math.floor(Math.random()*20-10), this.y+Math.floor(Math.random()*20-10), 2, 0, 2 * Math.PI, true);
+						ctx.fill(); 
+						this.takeDamageFromFire(this.elementalStatus[i].o);
+						break;
+					case 2: // ice
+						this.mSpeed = this.mSpeed*0.8; 
+						break;
+					case 3: // lightning
+						var apu = (this.elementalStatus[i].time-Date.now())/25;
+						this.mSpeed = this.mSpeed * apu;
+						break;
+					case 4: // explosive
+						break;
+					default:
+						break;
+				}				
+				
+				
+			}
+		}
+	}
 	
 	this.move = function () {
 	
@@ -100,14 +137,29 @@ function enemy(type) {
 			}
 		} 
 		else {				
+			
 			atan=-Math.atan2(this.x-path[this.nextpoint].x,this.y-path[this.nextpoint].y); 			
-			this.x += Math.sin(atan)*(this.speed/2);
-			this.y -= Math.cos(atan)*(this.speed/2);
-			this.moved += Math.abs(Math.sin(atan)*(this.speed/2)) + Math.abs(Math.cos(atan)*(this.speed/2));
+			this.x += Math.sin(atan)*(this.mSpeed/2);
+			this.y -= Math.cos(atan)*(this.mSpeed/2);
+			this.moved += Math.abs(Math.sin(atan)*(this.mSpeed/2)) + Math.abs(Math.cos(atan)*(this.mSpeed/2));
 		}
+	}
+
+	this.takeDamageFromFire = function (o) {
+		this.health -= o.damage/500;
+		if (this.isDead()) {
+			o.increaseExp();
+			this.onDeath(false);
+		}
+		
 	}
 	
 	this.takeDamageFrom = function (o) {
+	
+		if (o.type != null && o.type != 0) {
+			this.elementalStatus[this.elementalStatus.length] = new burden(o);
+		}
+		
 		this.health -= o.damage;
 		if (o.isDestructive) {
 			o.active = false;
@@ -171,7 +223,7 @@ function turret(turtype,x,y,id) {
 	this.type = 0;
 	this.shot = 0;
 	this.experience = 0;
-	this.level = 1;
+	this.level = 1; //not used yet
 	this.timer = new Date().getTime();
 	this.aika = 0;
 	
@@ -255,7 +307,7 @@ function map(waves,path,interval,bgsrc) {
 	this.background.src= bgsrc;
 	this.amount = 5;
 	
-	this.newEnemy = function () {
+	this.nextEnemy = function () {
 		enemies[enemies.length] = new enemy(this.waves[this.wave][this.waveProg]);
 		aika = Date.now();
 		this.waveProg++;
@@ -426,6 +478,7 @@ function thunder(o1,o2) {
 
 
 function explosive(enemy,host) {
+	this.type = 0;
 	this.active = true;
 	this.enemy = {x : enemy.x, y : enemy.y};
 	this.host = host;
@@ -450,14 +503,24 @@ function explosive(enemy,host) {
 			ctx.lineWidth = 2;
 			ctx.stroke();
 			ctx.fill();
-			this.tick--;
+			
+			
+			if (this.tick > 20 && this.tick < 35  ) {
+				this.type = turrets[host].type;
+			} else {
+				this.type = 0;
+			}
 			
 			for (var i=0; i<enemies.length; i++) {
-			if (enemies[i].health>0 && inRange(this,enemies[i])) {
-				enemies[i].takeDamageFrom(this);
+				if (enemies[i].health>0 && inRange(this,enemies[i])) {
+					enemies[i].takeDamageFrom(this);
+				}			
 			}
 			
-			}
+			
+			this.tick--;
+
+			
 			
 		} else {
 			active = false;
@@ -468,4 +531,15 @@ function explosive(enemy,host) {
 		turrets[this.host].experience++; 
 	}
 	
+}
+
+
+
+function burden(o) {
+	this.active = true;
+	this.o = o;
+	this.time = Date.now()+5000;
+	if (o.type == 3 ) {
+		this.time = Date.now()+100;
+	}
 }

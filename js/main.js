@@ -18,13 +18,12 @@ function loop() {
 		if (spectate != 0 || spectate != null && spectate.name != null) {
 			drawInfo(spectate);
 		} else {
-			ctx2.drawImage(l,0,0);
+			ctx2.drawImage(logo,0,0);
 		}
 		
 	} else {
 		
-		ctx2.drawImage(l,0,0);
-				
+		ctx2.drawImage(logo,0,0); // towerdefence logo
 		ctx.fillStyle = "green";
 		ctx.fillRect(0,0,cwidth,cheight);
 		
@@ -113,7 +112,7 @@ function mapAI() {
 
 	if (currentMap.wait == 0 ) {
 		if (since(aika) > currentMap.interval) {
-			currentMap.newEnemy(); 
+			currentMap.nextEnemy(); 
 		}
 	} else {
 		if (Date.now() > currentMap.wait) {
@@ -234,9 +233,7 @@ function drawPoints(){
 	}
 }
 
-function createEnemy(type) {
-	enemies[enemies.length] = new enemy(type);
-}
+
 function checkMenu() { // 'll be changed
 	//alert(mousex2+" "+mousey2);
 	if (mousex2>280 && mousex2<280+90 && mousey2>10 && mousey2<40 ) {
@@ -269,7 +266,7 @@ function checkMenu() { // 'll be changed
 
 function click() {
 
-	spotavailable=true;
+	spotavailable = true;
 	if (!drag) {
 		for (var menuitem=0;menuitem<menu.length;menuitem++) {
 			if (mInsideObj(menu[menuitem])) {
@@ -328,7 +325,7 @@ function click() {
 }
 
 
-$(document).keydown(function(e){
+$(document).keydown(function(e){ // used for debugging
 	var key = e.which;
 	if (key == "37") {
 	aturrets[lastid].density+=0.01;

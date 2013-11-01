@@ -57,7 +57,7 @@ function drawInfo(o) {
 		var htext = "Health : "+o.health;
 		ctx2.fillText(htext, 150, 25);
 		ctx2.fillText("/ "+enemyTypes[o.type].health, 150+htext.length*8, 25);
-		ctx2.fillText("Speed : "+o.speed, 150, 45);
+		ctx2.fillText("Speed : "+o.mSpeed, 150, 45);
 		ctx2.fillText("Moved : "+o.moved,150,65);
 	}
 	
