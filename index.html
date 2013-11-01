@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+
+    @-webkit-viewport{width:device-width}
+    @-moz-viewport{width:device-width}
+    @-ms-viewport{width:device-width}
+    @-o-viewport{width:device-width}
+    @viewport{width:device-width}
+    
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+    var msViewportStyle = document.createElement("style");
+    msViewportStyle.appendChild(
+    document.createTextNode(
+    "@-ms-viewport{width:auto!important}"
+    )
+    );
+    document.getElementsByTagName("head")[0].
+    appendChild(msViewportStyle);
+    }
+  </style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body style="background:red;">
+
+
+
+    <canvas id="info" width="480" height="100" style="display: block;"></canvas><canvas id="myCanvas" width="480" height="700" style="display: block;">
+      Your browser does not support the canvas element.
+    </canvas>
+
+
+  <script type="text/javascript" src="js/initialize.js"></script>
+  <script type="text/javascript" src="js/functions.js"></script>
+  <script type="text/javascript" src="js/info.js"></script>
+  <script type="text/javascript" src="js/objects.js"></script>
+  <script type="text/javascript" src="js/initialize2.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+
+</body>
+</html>
