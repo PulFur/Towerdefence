@@ -434,7 +434,7 @@ function drawPerk() {
 		ctx.fillStyle = perks[this.type];
 		ctx.arc(this.x, this.y, 20, 0, 2 * Math.PI, true);
 		ctx.fill();
-		ctx.stroke();
+		//ctx.stroke();
 	}
 }
 

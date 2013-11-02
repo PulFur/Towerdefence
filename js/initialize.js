@@ -1,9 +1,11 @@
 var mineimg = new Image();
-	mineimg.src = "gfx/mine.bmp";
+	mineimg.src = "gfx/mine.png";
 	
 var turimg = new Image();
 	turimg.src = "gfx/turret.png";
-	
+
+var eturimg = new Image();
+	eturimg.src = "gfx/auraturret.gif";
 var logo = new Image();
 	logo.src = "ui/infoUI.jpg";
 	
@@ -14,7 +16,7 @@ var rocketimg = new Image();
 	rocketimg.src = "gfx/rocket.png";
 	
 var aturimg = new Image();
-	aturimg.src = "gfx/auraturret.gif";
+	aturimg.src = "gfx/aura.png";
 	
 var sellimg = new Image();
 	sellimg.src = "gfx/sell.png";

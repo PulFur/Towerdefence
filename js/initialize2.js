@@ -27,7 +27,7 @@ turretTypes[turretTypes.length] =
 	firespeed : 0,
 	fires : false,
 	img : mineimg,
-	value : 5,
+	value : 10,
 	isDestructive : true,
 	shoot : function(o) {
 		if (o != null) {
@@ -49,7 +49,7 @@ turretTypes[turretTypes.length] =
 	firespeed : 300,
 	fires : false,
 	img : aturimg,
-	value : 5,
+	value : 15,
 	shoot : function(o) {
 		if (o == null) {
 			for (var i=this.range; i > 15; i-=10) {
@@ -87,8 +87,8 @@ turretTypes[turretTypes.length] =
 	range : 80,
 	firespeed : 1000,
 	fires : false,
-	img : aturimg,
-	value : 5,
+	img : eturimg,
+	value : 20,
 	shoot : function(o) {
 	
 		if (o != null && o.health>0) {
@@ -110,8 +110,6 @@ turretTypes[turretTypes.length] =
 			}
 			
 			var r = Math.floor(Math.random()*(arr.length));
-			
-
 			thunders[thunders.length] = new thunder(this,arr[r]);
 			
 				
@@ -167,7 +165,7 @@ enemyTypes[5] =
 	name : "Slug",
 	speed : 0.5,
 	health : 25,
-	rewardmoney : 4,
+	rewardmoney : 3,
 	img : addImage("enemies/Slug.gif") 
 }
 
@@ -176,7 +174,7 @@ enemyTypes[6] =
 	name : "Bee",
 	speed : 1.5,
 	health : 10,
-	rewardmoney : 4,
+	rewardmoney : 1,
 	img : addImage("enemies/Bee.gif") 
 }
 
@@ -185,7 +183,7 @@ enemyTypes[7] =
 	name : "Spider",
 	speed : 1.8,
 	health : 5,
-	rewardmoney : 4,
+	rewardmoney : 2,
 	img : addImage("enemies/Spider.gif") 
 }
 
@@ -194,7 +192,7 @@ enemyTypes[8] =
 	name : "Ant",
 	speed : 1.0,
 	health : 15,
-	rewardmoney : 4,
+	rewardmoney : 2,
 	img : addImage("enemies/Ant.gif") 
 }
 
@@ -203,7 +201,7 @@ enemyTypes[9] =
 	name : "Mantis",
 	speed : 1.0,
 	health : 25,
-	rewardmoney : 10,
+	rewardmoney : 5,
 	img : addImage("enemies/Mantis.gif") 
 }
 
@@ -211,17 +209,17 @@ enemyTypes[10] =
 {
 	name : "Roach",
 	speed : 0.5,
-	health : 50,
+	health : 20,
 	rewardmoney : 10,
 	img : addImage("enemies/Roach.gif") 
 }
 
 
 
-menu[menu.length] = new turret(0,150,cheight-40,-1); // normal
-menu[menu.length] = new turret(1,200,cheight-40,-1); // mine
-menu[menu.length] = new turret(2,250,cheight-40,-1); // aura
-menu[menu.length] = new turret(3,300,cheight-40,-1); // elemental
+menu[menu.length] = new turret(0,250,cheight-40,-1); // normal
+menu[menu.length] = new turret(2,300,cheight-40,-1); // aura
+menu[menu.length] = new turret(3,350,cheight-40,-1); // elemental
+menu[menu.length] = new turret(1,400,cheight-40,-1); // mine
 
 menu[menu.length] = new sell(450,cheight-40); // sell button
 
@@ -230,10 +228,10 @@ buttons[buttons.length] = new button("Play",cwidth/2-100,100,200,40);
 buttons[buttons.length] = new button("Info",cwidth/2-100,150,200,40);
 buttons[buttons.length] = new button("Credits",cwidth/2-100,200,200,40);
 
-perks[1] = "red";
-perks[2] = "cyan";
-perks[3] = "yellow";
-perks[4] = "purple";
+perks[1] = "rgba(255,0,0,0.5)";
+perks[2] = "rgba(125,255,255,0.5)";
+perks[3] = "rgba(255,255,0,0.5)";
+perks[4] = "rgba(125,125,255,0.5)";
 
 
 

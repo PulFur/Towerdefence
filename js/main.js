@@ -154,23 +154,33 @@ function mapAI() {
 
 function drawUI() {
 
-	ctx.font = 'bold 12pt Georgia';
 	
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, c.height-bottomUIheight, c.width, bottomUIheight);
 	ctx.fillStyle = "black";
 
-	ctx.fillText("Money : "+money+" $",5,cheight-50);	
-	ctx.fillText("Enemies : "+(currentMap.waveProg-1)+" / "+(currentMap.waves[currentMap.wave].length-1),5,cheight-35);	
-	ctx.fillText("Wave : "+(currentMap.wave+1)+" / "+currentMap.waves.length,5,cheight-20);
+	ctx.font = 'bold 15pt Georgia';
+		
+	ctx.fillText("Money",5,cheight-40);	
+	ctx.font = 'bold 18pt Georgia';
+	ctx.fillStyle = "yellow";
+	ctx.fillText(money,18,cheight-18);
+
+	ctx.fillStyle = "black";
+	ctx.drawImage(sellimg,0,0,sellimg.width, sellimg.height,20+(money.toString().length*12),cheight-16-sellimg.height/2,sellimg.width-15,sellimg.height-17);
+	ctx.font = 'bold 12pt Georgia';
 	
-	ctx.fillText("Time : ",5,cheight-5);
+	ctx.fillText("Enemies : "+(currentMap.waveProg-1)+" / "+(currentMap.waves[currentMap.wave].length-1),90,cheight-45);	
+	ctx.fillText("Wave : "+(currentMap.wave+1)+" / "+currentMap.waves.length,90,cheight-30);
+	
+	ctx.fillText("Time : ",90,cheight-15);
+
 	var t = currentMap.wait - Date.now();
 	t = Math.floor(t/1000);
 	if (t>0 && t<60) {
-		ctx.fillText(t+" s",80,cheight-5);
+		ctx.fillText(t+" s",150,cheight-15);
 	} else {
-		ctx.fillText("0 s",80,cheight-5);	
+		ctx.fillText("0 s",150,cheight-15);	
 	}
 	
 	
@@ -374,7 +384,7 @@ $(document).keydown(function(e){ // used for debugging
 		currentMap.wait = Date.now();
 	}
 	if (key == "39") {
-	aturrets[lastid].density-=0.01;	
+		money+=10;
 	
 	}
 	
