@@ -35,11 +35,16 @@ function loop() {
 				if (mouseup && buttons[oButton].read()) {
 					switch (oButton) {
 						case 1:
+							clearObjects();
 							gameStarted = true;
+							maps[level].initialize();
 							//selectLevel = true;
 							break;
 						case 2:
 							showInfo = true;
+							clearObjects();
+							turrets[turrets.length] = new turret(0,250,200,turrets.length);
+							turrets[turrets.length-1].onBought();
 							break;
 						case 3:
 							showCredits = true;
@@ -85,7 +90,10 @@ function loop() {
 		}
 		
 		if (showInfo) {
-
+			if (turrets[0].ableToShoot({x: turrets[0].x, y:turrets[0].y, active: true})) {
+				turrets[0].shoot({x: turrets[0].x+Math.floor(Math.random()*200-100), y:turrets[0].y+Math.floor(Math.random()*200-100), active: true});
+			}
+			drawObjects();
 		}
 			
 		if (showCredits) {
@@ -110,13 +118,33 @@ function mapAI() {
 
 	currentMap = maps[level];
 
-	if (currentMap.wait == 0 ) {
-		if (since(aika) > currentMap.interval) {
-			currentMap.nextEnemy(); 
+	
+	if (currentMap.waitForFinish) {
+	
+		enemiesLeft = 0;
+		for (var i = 0 ; i < enemies.length; i++) {
+			if (enemies[i].health > 0) {
+				enemiesLeft++;
+			}
 		}
-	} else {
-		if (Date.now() > currentMap.wait) {
-			currentMap.nextWave();
+		
+		if (enemiesLeft == 0 ) {
+			currentMap.waitForFinish = false;
+			gameStarted = false;
+			showMenu = true;
+			level++;
+			clearObjects()
+		}
+		
+	} else {	
+		if (currentMap.wait == 0 ) {
+			if (since(aika) > currentMap.interval) {
+				currentMap.nextEnemy(); 
+			}
+		} else {
+			if (Date.now() > currentMap.wait) {
+				currentMap.nextWave();
+			}
 		}
 	}
 	
@@ -126,24 +154,27 @@ function mapAI() {
 
 function drawUI() {
 
+	ctx.font = 'bold 12pt Georgia';
 	
 	ctx.fillStyle = "green";
 	ctx.fillRect(0, c.height-bottomUIheight, c.width, bottomUIheight);
 	ctx.fillStyle = "black";
+
+	ctx.fillText("Money : "+money+" $",5,cheight-50);	
+	ctx.fillText("Enemies : "+(currentMap.waveProg-1)+" / "+(currentMap.waves[currentMap.wave].length-1),5,cheight-35);	
+	ctx.fillText("Wave : "+(currentMap.wave+1)+" / "+currentMap.waves.length,5,cheight-20);
 	
-	ctx.fillText("Money : "+money,20,cheight-50);		
-	ctx.fillText("Enemies : "+currentMap.waveProg+" / "+currentMap.waves[currentMap.wave].length,20,cheight-40);	
-	ctx.fillText("Wave : "+currentMap.wave+" / "+currentMap.waves.length,20,cheight-30);
-	
+	ctx.fillText("Time : ",5,cheight-5);
 	var t = currentMap.wait - Date.now();
 	t = Math.floor(t/1000);
 	if (t>0 && t<60) {
-		ctx.fillText("Time : "+t,20,cheight-20);
+		ctx.fillText(t+" s",80,cheight-5);
+	} else {
+		ctx.fillText("0 s",80,cheight-5);	
 	}
 	
-	ctx.stroke();
 	
-	ctx.fillText(kills,0,cheight-50);
+	ctx.stroke();
 	
 }
 function drawDrag() {
@@ -172,7 +203,19 @@ function clearScreen(which) {
 function drawObjects() {
 	for (var oTurret = 0; oTurret<turrets.length; oTurret++) 	turrets[oTurret].update();
 	for (var oBullet = 0; oBullet<bullets.length;oBullet++) 	bullets[oBullet].update();
-	for (var oMenu = 0; oMenu<menu.length; oMenu++) 			menu[oMenu].draw();
+	for (var oMenu = 0; oMenu<menu.length; oMenu++) {
+		menu[oMenu].draw();
+		if (menu[oMenu].value > 0) {
+			if (money >= menu[oMenu].value) {
+				ctx.fillStyle = "rgb(0,255,0)";
+			} else {
+				ctx.fillStyle = "rgb(255,0,0)";			
+			}
+			ctx.fillText(menu[oMenu].value+" $",menu[oMenu].x-10,cheight-10);//menu[oMenu].y+30);
+
+		}
+	}
+	
 	for (var aNotice = 0 ; aNotice<notices.length; aNotice++) 	notices[aNotice].draw();
 	for (var aThunder = 0 ; aThunder < thunders.length; aThunder++) thunders[aThunder].update();
 	for (var aExplosive = 0 ; aExplosive < explosives.length; aExplosive++) explosives[aExplosive].update();
@@ -209,7 +252,7 @@ function drawPoints(){
 	for (var b=0;b<currentMap.path.length; b++)  {
 		path = currentMap.path[b];
 		for (var i=0;i<currentMap.path[b].length;i++) {
-			ctx.fillRect(path[i].x,path[i].y,10,10);
+			//ctx.fillRect(path[i].x,path[i].y,10,10);
 			if (drag && dragi.ttype != 1 && !dragi.isTool) {
 				if (i+1<path.length) {
 					distance = lineDistance(path[i].x,path[i].y,path[i+1].x,path[i+1].y);
@@ -221,7 +264,7 @@ function drawPoints(){
 						ys = path[i].y-Math.cos(atan)*a;
 						
 						ctx.beginPath();
-						ctx.arc(xs,ys,30, 0, 2 * Math.PI, true);
+						ctx.arc(xs,ys,20, 0, 2 * Math.PI, true);
 						ctx.lineWidth = 1;
 						ctx.fill();
 		
@@ -300,12 +343,12 @@ function click() {
 				for (var i=0;i<path.length;i++) {
 					if (i+1<path.length) {
 						distance = lineDistance(path[i].x,path[i].y,path[i+1].x,path[i+1].y);
-						for (var a=0;a<distance;a+=10) {
+						for (var a=0;a<distance;a+=20) {
 							atan=-Math.atan2(path[i].x-path[i+1].x,path[i].y-path[i+1].y); 
 							xs = path[i].x+Math.sin(atan)*a;
 							ys = path[i].y-Math.cos(atan)*a;
 							
-							if (mInsideObj({x:xs,y:ys, width:60, height:60}) && dragi.ttype != 1 && !dragi.isTool) {
+							if (mInsideObj({x:xs,y:ys, width:40, height:40}) && dragi.ttype != 1 && !dragi.isTool) {
 								spotavailable = false;
 							}
 			
@@ -328,7 +371,7 @@ function click() {
 $(document).keydown(function(e){ // used for debugging
 	var key = e.which;
 	if (key == "37") {
-	aturrets[lastid].density+=0.01;
+		currentMap.wait = Date.now();
 	}
 	if (key == "39") {
 	aturrets[lastid].density-=0.01;	

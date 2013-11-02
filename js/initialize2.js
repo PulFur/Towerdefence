@@ -237,14 +237,60 @@ perks[4] = "purple";
 
 
 
+maps[maps.length] =	new map(
+new Array( // waves
+	new Array(1500,1,2,3,4,5,6),
+	new Array(1500,5,5,6,5,7,7),
+	new Array(1500,5,5,6,7,7,7),
+	new Array(1500,7,6,6,5,5,7),
+	new Array(1500,7,7,7,7,7,7)
+	),
+new Array( // path
+		new Array(
+			new dot(0,0),
+			new dot(85,90),//220 
+			new dot(15,160), //370,100
+			new dot(110,250),
+			new dot(240,130), //
+			new dot(240,300)
+		),
+		new Array(
+			new dot(480,0),
+			new dot(385,90),//220 
+			new dot(455,160), //370,100
+			new dot(365,250),
+			new dot(240,130), //
+			new dot(240,300)
+		),
+		new Array(
+			new dot(0,630),
+			new dot(85,550),//220 
+			new dot(15,450), //370,100
+			new dot(110,385),
+			new dot(240,500), //
+			new dot(240,300)
+		),
+		new Array(
+			new dot(480,630),
+			new dot(385,550),//220 
+			new dot(455,450), //370,100
+			new dot(365,385),
+			new dot(240,500), //
+			new dot(240,300)
+		)
+),		
+		
+500, // interval
+"maps/map5.png" // map src
+);
 
 maps[maps.length] =	new map(
 new Array( // waves
-	new Array(5,5,6,5,5,7),
-	new Array(5,5,6,5,7,7),
-	new Array(5,5,6,7,7,7),
-	new Array(7,6,6,5,5,7),
-	new Array(7,7,7,6,6,7)
+	new Array(1500,1,1,1,1,1,1),
+	new Array(1500,5,5,6,5,7,7)
+	//new Array(1500,5,5,6,7,7,7),
+	//new Array(1500,7,6,6,5,5,7),
+	//new Array(1500,7,7,7,7,7,7)
 	),
 new Array( // path
 		new Array(
@@ -265,10 +311,10 @@ new Array( // path
 
 maps[maps.length] =	new map(
 new Array(
-	new Array(1,2),
-	new Array(2,2,1,1),
-	new Array(2,2,2,2),
-	new Array(2,2,2,2)
+	new Array(1500,1,2),
+	new Array(1500,2,2,1,1),
+	new Array(1500,2,2,2,2),
+	new Array(1500,2,2,2,2)
 	),
 new Array( 
 	new Array(

@@ -87,7 +87,6 @@ function addImage(path) {
 
 
 function clearObjects() {
-	mines.length = null;
 	notices.length = null;
 	thunders.length = null;
 	enemies.length = null;

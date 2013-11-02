@@ -294,18 +294,29 @@ function dot(x,y) {
 }
 
 function map(waves,path,interval,bgsrc) {
-	this.wait = Date.now() + 5000;
+	this.wait = 0;
+	this.waitForFinish = false;
 	this.wave = 0;
-	this.waveProg = 0;
+	this.waveProg = 1;
 	
 	this.waveSpan = 15000;
 	
 	this.waves = waves;
 	this.path = path;
-	this.interval = interval;
+
+	this.interval = 0;
+	
 	this.background = new Image();
 	this.background.src= bgsrc;
 	this.amount = 5;
+	
+	this.initialize = function () {
+		this.interval = this.waves[this.wave][0];
+		this.wait = Date.now() + 5000;
+		this.wave = 0;
+		this.waveProg = 1;
+	}
+	
 	
 	this.nextEnemy = function () {
 		enemies[enemies.length] = new enemy(this.waves[this.wave][this.waveProg]);
@@ -318,14 +329,22 @@ function map(waves,path,interval,bgsrc) {
 	}
 	
 	this.nextWave = function () {
-		this.wait = 0;
-		this.wave++;
-		this.waveProg = 0;
+		if (this.waveProg > 1 ) {
+			this.wave++;
+		} 
 		
 		if (this.wave == this.waves.length) {
-			gameStarted = false;
-			showMenu = true;
-		}
+			this.wave--;
+			this.waitForFinish = true;
+			this.waveProg = 1;
+			this.wait = 0;
+		} else {
+			this.wait = 0;
+			this.waveProg = 1;
+			this.interval = this.waves[this.wave][0];
+		
+		}		
+		
 	}
 
 }
@@ -389,11 +408,13 @@ function sell(x,y) {
 function onBought() {
 	this.active = true;
 	money -= this.value;
+	notices[notices.length] = new notice(this.x,this.y,"- "+this.value+" $",255,0,0);
 }
 
 function onSold() {
 	this.active = false;
 	money += this.value * sellRate;
+	notices[notices.length] = new notice(this.x,this.y,"+ "+this.value * sellRate+" $",100,255,0);
 }
 
 function onClick() {

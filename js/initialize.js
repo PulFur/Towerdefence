@@ -102,10 +102,12 @@ var xs, ys;
 var aika = Date.now();
 
 var level=0;
+var wave = 0 ;
 var kills = 0;
 var money = 10;
 
 var currentMap;
+var enemiesLeft = 0;
 
 var showMenu = true;
 var gameStarted = false;
@@ -119,8 +121,5 @@ var mouseObject;
 var spectate = 0;
 
 var bottomUIheight = 68;
-
-
-
 
 var currentInterval;
